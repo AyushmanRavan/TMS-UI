@@ -1,0 +1,110 @@
+<!-- <ng-template #card>
+
+    <div class="summary" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="10px">
+
+        <ng-container *ngFor="let item of blocks">
+            <mat-card class="c1" (click)="goTo('products')" fxFlex="50" fxFlex.gt-sm="100%">
+
+                <mat-card-content>
+                    <mat-card-title class="custom-title">
+                        <mat-icon mat-list-icon>insert_chart</mat-icon>
+                        <span class="text">Production</span>
+                    </mat-card-title>
+                    <mat-grid-list cols="3" rowHeight="90px">
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1 class="mat-display-1 count">1</h1>
+                                <div>
+                                    <div>Total</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1 class="mat-display-1 count">1</h1>
+                                <div>
+                                    <div>Good</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1 class="mat-display-1 count">2</h1>
+                                <div>
+                                    <div>Rejection</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </mat-card-content>
+                <div class="card-footer">
+                    Avg / Hour : 3
+                </div>
+            </mat-card>
+        </ng-container>
+    </div>
+
+</ng-template>
+ -->
+
+<div color="primary">
+    <span>Card view demo</span>
+    <button mat-button (click)="toggleGridColumns()" fxHide.lt-md>
+        <span *ngIf="gridColumns === 4">Three Columns</span>
+        <span *ngIf="gridColumns === 3">Four Columns</span>
+    </button>
+</div>
+
+<div class="summary" fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let num of summary">
+        <mat-card class="c1">
+
+            <mat-card-content>
+                <mat-card-title class="custom-title">
+                    <mat-icon mat-list-icon>insert_chart</mat-icon>
+                    <span class="text">{{num.header_name}}</span>
+                </mat-card-title>
+                <mat-grid-list cols="3" rowHeight="90px">
+                    <mat-grid-tile>
+                        <div class="block">
+                            <h1>{{num.max_alarm_count}}</h1>
+                            <div>
+                                <div>Max Alarm Count</div>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <div class="block">
+                            <h1>{{num.min_alarm_count}}</h1>
+                            <div>
+                                <div>Min Alarm Count</div>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<div style="display: block;">
+    <canvas baseChart width="500" height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
+        [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+        [plugins]="lineChartPlugins">
+    </canvas>
+</div>
+
+<div style="display: block;">
+    <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="{{header.column_name}}" *ngFor="let header of parameters">
+            <mat-header-cell *matHeaderCellDef> {{header.header_name}} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element[header.column_name]}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+</div>

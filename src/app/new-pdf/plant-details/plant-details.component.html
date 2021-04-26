@@ -1,0 +1,33 @@
+
+<div class="productionReportDetails">
+  <div class="productionReportFirstHalf">
+    <div class="productionReportKeysFirstHalf">
+      <span> {{plantDetails.reportKey}} </span><br>
+      <span *ngIf="plantDetails.machineKey"> {{plantDetails.machineKey}}</span><br>
+    </div>
+    <div class="colon">
+      <span>:</span><br>
+      <span *ngIf="plantDetails.machineKey">:</span><br>
+    </div>
+    <div class="productionReportValuesFirstHalf">
+      <span> {{ plantDetails.reportValue }} </span><br>
+      <span *ngIf="plantDetails.machineValue"> {{ plantDetails.machineValue }} </span><br>
+    </div>
+  </div>
+  <div class="productionReportSecondHalf">
+    <div class="productionReportKeysSecondHalf">
+      <span> {{plantDetails.fromKey}} </span><br>
+      <span> {{plantDetails.toKey}} </span><br>
+    </div>
+    <div class="colon">
+      <span>:</span><br>
+      <span>:</span><br>
+    </div>
+    <div class="productionReportValuesSecondHalf">
+      <span> {{ formattedFromDate }} {{ formattedFromTime }} </span><br>
+      <span> {{ formattedToDate }} {{ formattedToTime }}</span><br>
+    </div>
+  </div>
+</div>
+
+  

@@ -1,0 +1,76 @@
+<div class="selection">
+    <form [formGroup]="report">
+        <mat-card class="custom-card">
+            <mat-card-content [style.marginBottom.px]="10">
+
+                <div fxLayout fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="25px">
+                    <div fxFlex="100%">
+
+                        <mat-form-field>
+                            <mat-icon [owlDateTimeTrigger]="reportFrom" matSuffix>date_range</mat-icon>
+                            <input [max]="max" readonly matInput placeholder="From Date Time" formControlName="from"
+                                [owlDateTime]="reportFrom" [owlDateTimeTrigger]="reportFrom">
+                            <owl-date-time (afterPickerClosed)="setMinToDate()" [pickerType]="showTime"
+                                [startAt]="fromStartAt" #reportFrom></owl-date-time>
+                            <mat-error *ngIf="report.get('from').hasError('required')">
+                                From is
+                                <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-icon [owlDateTimeTrigger]="reportTo" matSuffix>date_range</mat-icon>
+                            <input [max]="max" [min]="min" readonly matInput placeholder="To Date Time"
+                                formControlName="to" [owlDateTime]="reportTo" [owlDateTimeTrigger]="reportTo"
+                                (ngModelChange)="onChange($event)">
+                            <owl-date-time [pickerType]="showTime" [startAt]="toStartAt" #reportTo></owl-date-time>
+                            <mat-error *ngIf="report.get('to').hasError('required')">
+                                To is
+                                <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="batchStatus">
+                            <mat-select placeholder="Select Status" formControlName="status">
+                                <mat-option *ngFor="let option of batchStatusOptions" [value]="option">
+                                    {{ option.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="batchReport">
+                            <mat-select placeholder="Batch Number" formControlName="batch_id"
+                                (selectionChange)="onChangeBatch($event.value)">
+                                <mat-option *ngFor="let option of batchReportOptions" [value]="option">
+                                    {{ option }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="batchReport">
+                            <mat-select placeholder="Interval (minutes)" (click)="ondatechange()"
+                                formControlName="interval">
+                                <mat-option value="1">1</mat-option>
+                                <mat-option value="5">5</mat-option>
+                                <mat-option value="10">10</mat-option>
+                                <mat-option value="15">15</mat-option>
+                                <mat-option value="30">30</mat-option>
+                                <mat-option value="60">60</mat-option>
+                                <mat-option value="1440" [disabled]="show">1 day</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+            </mat-card-content>
+            <button (click)="onGenerate(downloadPdfBtn)" [disabled]="!report.valid" mat-raised-button
+                color="accent">GENERATE</button>
+            <!-- <button #downloadPdfBtn mat-raised-button color="accent">DownloadPDF</button> -->
+            <button #downloadPdfBtn [disabled]="true" mat-raised-button color="accent">DownloadPDF</button>
+
+        </mat-card>
+    </form>
+</div>

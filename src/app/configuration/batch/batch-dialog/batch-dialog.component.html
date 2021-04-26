@@ -1,0 +1,108 @@
+<h2 mat-dialog-title *ngIf="dialog.mode == 'delete'" class="titleHead">{{dialog.title}} Batch</h2>
+<h2 mat-dialog-title *ngIf="dialog.mode !== 'delete'">{{dialog.title}} Batch</h2>
+<form *ngIf="dialog.mode !== 'delete'; else deleteForm" [formGroup]="batch" (ngSubmit)="onSubmit()">
+    <mat-dialog-content>
+
+        <div class="user" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="20px">
+            <div fxFlex="50%">
+                <mat-form-field>
+                    <input matInput formControlName="batch_id" placeholder="Batch number">
+                    <mat-error *ngIf="batch.get('batch_id').hasError('required')">
+                        Batch number is <strong> required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%" >
+                <mat-form-field>
+                    <input matInput formControlName="product_name" placeholder="Product Name">
+                    <mat-error *ngIf="batch.get('product_name').hasError('required')">
+                        Product name is
+                        <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+
+        <div class="user" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="20px">
+            <div fxFlex="50%" fxFlex.gt-sm="100%">
+                <!-- <mat-form-field>
+                    <input matInput formControlName="rackName" placeholder="Rack Name">
+                    <mat-error *ngIf="batch.get('rackName').hasError('required')">
+                        Rack Name is <strong> required</strong>
+                    </mat-error>
+                </mat-form-field> -->
+
+
+                <mat-form-field>
+                    <mat-select placeholder="Select Rack Name" formControlName="rackName">
+                        <mat-option *ngFor="let rack of rackNameOptions" [value]="rack">{{rack}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="batch.get('rackName').hasError('required')">
+                        Rack Name is
+                        <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%" fxFlex.gt-sm="100%">
+                <mat-form-field>
+                    <input matInput formControlName="quantity" placeholder="Quantity">
+                    <mat-error *ngIf="batch.get('quantity').hasError('required')">
+                        Quantity is
+                        <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="20px">
+
+            <div fxFlex="50%" fxFlex.gt-sm="100%">
+                <mat-form-field>
+                    <mat-icon [owlDateTimeTrigger]="Start_Time" matSuffix>date_range</mat-icon>
+                    <input [max]="max" readonly matInput placeholder="start_time" formControlName="start_time"
+                        [owlDateTime]="Start_Time" [owlDateTimeTrigger]="Start_Time">
+                    <owl-date-time (afterPickerClosed)="setMinToDate()" [pickerType]="showTime" [startAt]="fromStartAt"
+                        #Start_Time></owl-date-time>
+                    <mat-error *ngIf="batch.get('start_time').hasError('required')">
+                        Start time is <strong> required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%" fxFlex.gt-sm="100%">
+                <!-- <mat-form-field>
+                    <mat-icon [owlDateTimeTrigger]="End_Time" matSuffix>date_range</mat-icon>
+                    <input [max]="max" [min]="min" readonly matInput placeholder="end_time" formControlName="end_time"
+                        [owlDateTime]="End_Time" [owlDateTimeTrigger]="End_Time">
+                    <owl-date-time [pickerType]="showTime" [startAt]="toStartAt" #End_Time></owl-date-time>
+                    <mat-error *ngIf="batch.get('end_time').hasError('required')">
+                        End time is <strong> required</strong>
+                    </mat-error>
+                </mat-form-field> -->
+            </div>
+
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" [disabled]="!batch.valid || loading">{{dialog.btnCaptions.ok}}</button>
+        <button [disabled]="loading" mat-button mat-dialog-close>Cancel</button>
+        <app-spinner *ngIf="loading"></app-spinner>
+    </mat-dialog-actions>
+</form>
+
+<ng-template #deleteForm>
+    <mat-dialog-content>
+        Do you want to delete
+        <strong>{{dialog.details.batch_id}}</strong>?
+    </mat-dialog-content>
+    <mat-dialog-actions [style.marginTop.px]="10">
+        <button mat-raised-button [disabled]="loading" (click)="updateBatch(dialog.details,dialog.mode)"
+            [ngStyle]="{backgroundColor:'#FE3F5F',color:'#FFF'}">{{dialog.btnCaptions.ok}}</button>
+        <button mat-button mat-dialog-close>Cancel</button>
+        <app-spinner *ngIf="loading"></app-spinner>
+    </mat-dialog-actions>
+</ng-template>

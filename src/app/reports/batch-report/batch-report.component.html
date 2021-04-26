@@ -1,0 +1,82 @@
+<div fxLayout fxLayoutAlign="center">
+    <h2 class="mat-h2">Batch Report</h2>
+</div>
+
+<div>
+    <report-form type="batch_report" (select)="onSelect($event)"></report-form>
+</div>
+
+<div fxLayout fxLayoutAlign="center" *ngIf="loadedspinner">
+    <app-spinner></app-spinner>
+</div>
+
+<error *ngIf="errMessage" [message]="errMessage" [hidden]="Errormsg"></error>
+
+<section [hidden]="loaded">
+
+    <div class="summary" fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let item of summary">
+            <mat-card class="c1" [style.background-color]="item.colour">
+
+                <mat-card-content>
+                    <mat-card-title class="custom-title">
+                        <mat-icon mat-list-icon>insert_chart</mat-icon>
+                        <span class="text">{{item.header_name}}</span>
+                    </mat-card-title>
+                    <mat-grid-list cols="3" rowHeight="90px">
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1>{{item.max_alarm_count}}</h1>
+                                <div>
+                                    <div>Max Alarm Count</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1>{{item.min_alarm_count}}</h1>
+                                <div>
+                                    <div>Min Alarm Count</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <div class="block">
+                                <h1>{{item.current_temperature}}</h1>
+                                <div>
+                                    <div>Batch Ending Temperature</div>
+                                </div>
+                            </div>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    <br>
+    <div style="display: block;">
+        <canvas baseChart width="500" height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
+            [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+            [chartType]="lineChartType" [plugins]="lineChartPlugins">
+        </canvas>
+    </div>
+    <br>
+    <div style="display: block;">
+        <mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="{{header.column_name}}" *ngFor="let header of parameters">
+                <mat-header-cell *matHeaderCellDef> {{header.header_name}} </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element[header.column_name]}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+
+
+</section>
+
+<template #pdfContainer>
+</template>

@@ -30,9 +30,10 @@ const reportRoutes: Routes = [
     OwlNativeDateTimeModule,
     SharedModule,
     PdfModule, 
-    NewPdfModule,
+    NewPdfModule, 
     NgxGaugeModule,
-    SharedComponentModule
+    SharedComponentModule,
+    NewPdfModule
   ],
   exports: [RouterModule],
   declarations: [

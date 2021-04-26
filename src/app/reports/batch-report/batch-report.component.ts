@@ -26,9 +26,10 @@ export class BatchReportComponent implements OnInit {
     REPORT_TYPE: 'simpleReport',
     reportFileName: 'batchReport',
     reportPaperSize: 'A2',
-    reportLandscap: false
+    reportLandscap: false,
+    isChart: true
   };
-
+ 
   gridColumns = 3;
   batch_id: string;
   from: string;
@@ -147,13 +148,10 @@ export class BatchReportComponent implements OnInit {
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
 
+ 
+
   ngOnInit() {
     this.collection.data = [];
-    this.pdfData['lineChartOptions'] = this.lineChartOptions;
-    this.pdfData['lineChartColors'] = this.lineChartColors;
-    this.pdfData['lineChartLegend'] = this.lineChartLegend;
-    this.pdfData['lineChartType'] = this.lineChartType;
-    this.pdfData['lineChartPlugins'] = this.lineChartPlugins;
   }
 
 
@@ -172,27 +170,33 @@ export class BatchReportComponent implements OnInit {
     this.loaded = true;
     this.Errormsg = true;
 
+    const temObj = event.reportValue["batch_id"];
+
+    console.log(temObj['start_time'])
+    console.log(temObj['end_time'])
+
     this.pdfData['plantDetails'] = {
       machineKey: "Batch Id",
-      machineValue: event.reportValue["batch_id"],
+      machineValue: temObj['batch_id'],
 
       fromKey: "From",
-      fromValue: event.reportValue["from"],
+      fromValue: temObj['start_time'],
 
       toKey: "To",
-      toValue: event.reportValue["to"],
+      toValue: temObj['end_time'],
 
       reportKey: "Report Type",
       reportValue: "Batch Report",
     };
+    console.log(this.pdfData['plantDetails'])
 
-    this.batch_id = event.reportValue["batch_id"];
+    this.batch_id = event.reportValue["batch_id"]['batch_id'];
     this.from = this.formatDate(event.reportValue["from"]);
     this.to = this.formatDate(event.reportValue["to"]);
     this.interval = event.reportValue["interval"];
 
     const payload = {
-      batch_id: event.reportValue["batch_id"],
+      batch_id: event.reportValue["batch_id"]['batch_id'],
       from: this.formatDate(event.reportValue["from"]),
       to: this.formatDate(event.reportValue["to"]),
       interval: event.reportValue["interval"]
@@ -249,7 +253,7 @@ export class BatchReportComponent implements OnInit {
 
     this.reportsService.getBatchReportHeaders().subscribe(data => {
       this.parameters = data;
-      // console.log("  call getBatchReportHeaders data ==> ", data);
+      console.log("  call getBatchReportHeaders data ==> ", data);
       this.displayedColumns = this.parameters.map(item => item.column_name);
       // console.log("  monitoringDataColumn ==> ", this.displayedColumns);
       this.pdfData['monitoringDataColumn'] = this.displayedColumns;
@@ -324,7 +328,6 @@ export class BatchReportComponent implements OnInit {
     // this.lineChartColors = [];
     let flag: boolean = true;
     for (let item of collection) {
-
       for (let parameter of parameters) {
         if (parameter.column_name == "start_time") {
           this.lineChartLabels.push(item[parameter.column_name]);
@@ -345,10 +348,9 @@ export class BatchReportComponent implements OnInit {
       }
       flag = false;
     }
-    this.pdfData['lineChartLabels'] = this.lineChartLabels;
-    this.pdfData['lineChartData'] = this.lineChartData;
+  
   }
-
+ 
 
   //==========================================
 
@@ -356,6 +358,7 @@ export class BatchReportComponent implements OnInit {
     const factory = this.componentFactoryResolver.resolveComponentFactory(NewPdfComponent);
     this.viewContainerRef.clear();
     const componentRef = this.viewContainerRef.createComponent(factory);
+    this.pdfData['chart'] = document.getElementsByTagName('canvas')[0].toDataURL();
     componentRef.instance.getPdfData(this.pdfData);
     setTimeout(() => {
       componentRef.destroy();

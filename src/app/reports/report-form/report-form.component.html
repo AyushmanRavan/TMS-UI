@@ -43,7 +43,7 @@
                             <mat-select placeholder="Batch Number" formControlName="batch_id"
                                 (selectionChange)="onChangeBatch($event.value)">
                                 <mat-option *ngFor="let option of batchReportOptions" [value]="option">
-                                    {{ option }}
+                                    {{ option.batch_id }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

@@ -18,7 +18,8 @@ export class BatchStatusComponent implements OnInit {
     REPORT_TYPE: 'simpleReport',
     reportFileName: 'batchStatus',
     reportPaperSize: 'A2',
-    reportLandscap: false
+    reportLandscap: false,
+    isChart: false
   };
   from: string;
   to: string;
@@ -35,7 +36,7 @@ export class BatchStatusComponent implements OnInit {
     "batch_id", "rackName", "completedStatus", "product_name", "quantity",
   ];
   parameters: any[];
-
+  statusR: boolean = false;
   dataSource = new MatTableDataSource();
   btnRef: MatButton;
   @ViewChild('pdfContainer', { read: ViewContainerRef, static: true }) viewContainerRef: ViewContainerRef;
@@ -60,11 +61,8 @@ export class BatchStatusComponent implements OnInit {
 
     if (this.btnRef === undefined) {
       this.btnRef = event.downloadPdfBtnRef;
-      if (this.btnRef) {
-        this.btnRef._elementRef.nativeElement.addEventListener('click', this.createComponent.bind(this));
-      }
+      this.btnRef._elementRef.nativeElement.addEventListener('click', this.createComponent.bind(this));
     }
-
     console.log("Event Fired........", event);
     this.loadedspinner = true;
     this.loaded = true;
@@ -75,13 +73,13 @@ export class BatchStatusComponent implements OnInit {
 
     this.pdfData['plantDetails'] = {
       machineKey: "Batch Status",
-      machineValue: event.reportValue["status"].value,
+      machineValue: event.reportValue["status"].value ? "Complete" : "Incomplete",
 
       fromKey: "From",
-      fromValue: event.reportValue["from"],
+      fromValue: this.formatDate(event.reportValue["from"]),
 
       toKey: "To",
-      toValue: event.reportValue["to"],
+      toValue: this.formatDate(event.reportValue["to"]),
 
       reportKey: "Report Type",
       reportValue: "Batch Status",
@@ -131,9 +129,7 @@ export class BatchStatusComponent implements OnInit {
         });
       }
       this.pdfData['monitoringDataRow'] = this.collection.data;
-      if (this.btnRef) {
-        this.btnRef.disabled = false;
-      }
+      this.btnRef.disabled = false;
       this.loaded = false;
       this.loadedspinner = false;
     } else {

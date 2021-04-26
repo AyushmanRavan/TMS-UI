@@ -14,9 +14,9 @@ import * as moment from "moment";
 export class ReportFormComponent implements OnInit {
   @Output() select = new EventEmitter();
   @Input() type: String;
-  // @ViewChild('downloadPdfBtn') downloadPdfBtn: ElementRef;
+  @ViewChild('downloadPdfBtn') downloadPdfBtn: ElementRef;
   interval: boolean = false;
-
+  isFirst: boolean = true;
   report: FormGroup;
   show: boolean;
   fromStartAt;
@@ -71,14 +71,20 @@ export class ReportFormComponent implements OnInit {
       this.report.get('to').setValue(new Date());
       this.report.get('status').setValue(this.batchStatusOptions[1]);
 
-      // this.select.emit({ ...this.report.value });
-      this.passFormValues(this.report.value, null);
+
       this.report.get('batch_id').setValidators(null);
       this.report.get('batch_id').updateValueAndValidity();
     }
   }
 
+  ngAfterViewInit() {
+    
+    if (this.isFirst) {
+      this.passFormValues(this.report.value, this.downloadPdfBtn);
+      this.isFirst = false;
+    }
 
+  }
   getAllUniqueBatches(data) {
     this.configurationService.getAllUniqueBatches(data).subscribe(data => {
       if (data != null) {

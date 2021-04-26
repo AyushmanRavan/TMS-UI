@@ -4,7 +4,7 @@
     <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
       <!-- LOGO -->
       <div class="logo">
-        <img src="../../assets/Logo/analogic_icon.PNG" alt="company-logo" height="45" width="75">
+        <img src="../../assets/Logo/AFK_logo.jpg" alt="company-logo" height="45" width="75">
       </div>
       <!-- HEADER -->
       <div class="header">
@@ -39,12 +39,8 @@
           <div *ngIf="pdfData.summaryData">
             <app-summary-table [summaryData]="pdfData.summaryData"></app-summary-table>
           </div>
-          <div>
-            <canvas baseChart width="500" height="200" [datasets]="pdfData.lineChartData"
-              [labels]="pdfData.lineChartLabels" [options]="pdfData.lineChartOptions" [colors]="pdfData.lineChartColors"
-              [legend]="pdfData.lineChartLegend" [chartType]="pdfData.lineChartType"
-              [plugins]="pdfData.lineChartPlugins">
-            </canvas>
+          <div *ngIf="pdfData.isChart">
+            <img [src]="pdfData.chart" width="1200" height="400"/>
           </div>
         </div>
         <div *ngIf="pdfData.REPORT_TYPE == 'machineComparisonReport'">

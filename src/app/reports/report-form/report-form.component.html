@@ -19,14 +19,19 @@
                         </mat-form-field>
 
                         <mat-form-field>
-                            <mat-icon [owlDateTimeTrigger]="reportTo" matSuffix>date_range</mat-icon>
-                            <input [max]="max" [min]="min" readonly matInput placeholder="To Date Time"
-                                formControlName="to" [owlDateTime]="reportTo" [owlDateTimeTrigger]="reportTo"
-                                (ngModelChange)="onChange($event)">
+                            <ng-container *ngIf="batchStatus;else config">
+                                <input [min]="min" readonly matInput placeholder="To Date Time" formControlName="to"
+                                    [owlDateTime]="reportTo" [owlDateTimeTrigger]="reportTo"
+                                    (ngModelChange)="onChange($event)">
+                            </ng-container>
+                            <ng-template #config>
+                                <input [max]="max" [min]="min" readonly matInput placeholder="To Date Time"
+                                    formControlName="to" [owlDateTime]="reportTo" [owlDateTimeTrigger]="reportTo"
+                                    (ngModelChange)="onChange($event)">
+                            </ng-template>
                             <owl-date-time [pickerType]="showTime" [startAt]="toStartAt" #reportTo></owl-date-time>
                             <mat-error *ngIf="report.get('to').hasError('required')">
-                                To is
-                                <strong>required</strong>
+                                To is <strong>required</strong>
                             </mat-error>
                         </mat-form-field>
 
